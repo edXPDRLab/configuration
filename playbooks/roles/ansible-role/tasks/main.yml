@@ -5,7 +5,7 @@
   with_items:
     - tasks
     - handlers
-    - vars
+    - defaults
     - templates
     - files
 
@@ -14,4 +14,4 @@
   with_items:
     - tasks
     - handlers
-    - vars
+    - defaults 
