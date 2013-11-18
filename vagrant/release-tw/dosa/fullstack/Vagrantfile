@@ -7,6 +7,11 @@ Vagrant.configure("2") do |config|
 
   config.vm.network :private_network, ip: "192.168.33.10"
 
+  # Vagrant DNS config
+  config.dns.tld = "dev"
+  config.vm.hostname = "edx-fullstack-dosa"
+  config.dns.patterns = [/^.*edx.dev$/]
+
   config.vm.provider :virtualbox do |vb|
     vb.customize ["modifyvm", :id, "--memory", MEMORY.to_s]
 
@@ -21,3 +26,6 @@ Vagrant.configure("2") do |config|
     ansible.verbose = "extra"
   end
 end
+
+# optional
+VagrantDNS::Config.logger = Logger.new("dns.log")
