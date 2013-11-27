@@ -393,7 +393,8 @@
       "Forum02":        { "CIDR":"10.0.81.0/24" },
       "Mongo01":        { "CIDR":"10.0.90.0/24" },
       "Mongo02":        { "CIDR":"10.0.91.0/24" },
-      "Mongo03":        { "CIDR":"10.0.92.0/24" }
+      "Mongo03":        { "CIDR":"10.0.92.0/24" },
+      "Admin":          { "CIDR":"10.0.200.0/24" }
     },
     "MapRegionsToAvailZones":{
       "us-east-1":       { "AZone2":"us-east-1d",      "AZone0":"us-east-1b",      "AZone1":"us-east-1c" },
@@ -458,6 +459,38 @@
             "AZone1"
           ]
         }
+      }
+    },
+    "AdminSubnet":{
+      "Type":"AWS::EC2::Subnet",
+      "Properties":{
+        "VpcId":{
+          "Ref":"EdxVPC"
+        },
+        "CidrBlock":{
+          "Fn::FindInMap":[
+            "SubnetConfig",
+            "Admin",
+            "CIDR"
+          ]
+        },
+        "AvailabilityZone":{
+          "Fn::FindInMap":[
+            "MapRegionsToAvailZones",
+            { "Ref":"AWS::Region" },
+            "AZone0"
+          ]
+        },
+        "Tags":[
+          {
+            "Key":"Application",
+            "Value":"admin"
+          },
+          {
+            "Key":"Network",
+            "Value":"Private"
+          }
+        ]
       }
     },
     "EdxappSubnet01":{
@@ -2556,8 +2589,12 @@
         "LaunchConfigurationName":{
           "Ref":"EdxappServer"
         },
-        "MinSize":"2",
-        "MaxSize":"2",
+        "MinSize":{
+          "Ref":"EdxappDesiredCapacity"
+        },
+        "MaxSize":{
+          "Ref":"EdxappDesiredCapacity"
+        },
         "DesiredCapacity":{
           "Ref":"EdxappDesiredCapacity"
         },
@@ -2903,8 +2940,12 @@
         "LaunchConfigurationName":{
           "Ref":"XqueueServer"
         },
-        "MinSize":"2",
-        "MaxSize":"2",
+        "MinSize":{
+          "Ref":"XqueueDesiredCapacity"
+        },
+        "MaxSize":{
+          "Ref":"XqueueDesiredCapacity"
+        },
         "DesiredCapacity":{
           "Ref":"XqueueDesiredCapacity"
         },
@@ -3233,8 +3274,12 @@
         "LaunchConfigurationName":{
           "Ref":"RabbitMQServer"
         },
-        "MinSize":"2",
-        "MaxSize":"2",
+        "MinSize":{
+          "Ref":"RabbitMQDesiredCapacity"
+        },
+        "MaxSize":{
+          "Ref":"RabbitMQDesiredCapacity"
+        },
         "DesiredCapacity":{
           "Ref":"RabbitMQDesiredCapacity"
         },
@@ -3599,8 +3644,12 @@
         "LaunchConfigurationName":{
           "Ref":"XServer"
         },
-        "MinSize":"2",
-        "MaxSize":"2",
+        "MinSize":{
+          "Ref":"XServerDesiredCapacity"
+        },
+        "MaxSize":{
+          "Ref":"XServerDesiredCapacity"
+        },
         "DesiredCapacity":{
           "Ref":"XServerDesiredCapacity"
         },
@@ -4058,8 +4107,12 @@
         "LaunchConfigurationName":{
           "Ref":"WorkerServer"
         },
-        "MinSize":"2",
-        "MaxSize":"2",
+        "MinSize":{
+          "Ref":"WorkerDesiredCapacity"
+        },
+        "MaxSize":{
+          "Ref":"WorkerDesiredCapacity"
+        },
         "DesiredCapacity":{
           "Ref":"WorkerDesiredCapacity"
         }
@@ -4303,8 +4356,12 @@
         "LaunchConfigurationName":{
           "Ref":"ForumServer"
         },
-        "MinSize":"2",
-        "MaxSize":"2",
+        "MinSize":{
+          "Ref":"ForumDesiredCapacity"
+        },
+        "MaxSize":{
+          "Ref":"ForumDesiredCapacity"
+        },
         "DesiredCapacity":{
           "Ref":"ForumDesiredCapacity"
         },
@@ -4695,8 +4752,12 @@
         "LaunchConfigurationName":{
           "Ref":"MongoServer"
         },
-        "MinSize":"3",
-        "MaxSize":"3",
+        "MinSize":{
+          "Ref":"MongoDesiredCapacity"
+        },
+        "MaxSize":{
+          "Ref":"MongoDesiredCapacity"
+        },
         "DesiredCapacity":{
           "Ref":"MongoDesiredCapacity"
         }

@@ -9,16 +9,16 @@
 #
 #
 #
-# Handlers for role certs
-#
+# Handlers for role haproxy
+# 
 # Overview:
+# 
 #
+- name: haproxy | restart haproxy
+  service: name=haproxy state=restarted
 
-- name: certs | restart certs
-  supervisorctl_local: >
-    name=certs
-    supervisorctl_path={{ supervisor_ctl }}
-    config={{ supervisor_cfg }}
-    state=restarted
-  tags: deploy
+- name: haproxy | reload haproxy
+  service: name=haproxy state=reloaded
 
+- name: haproxy | restart rsyslog
+  service: name=rsyslog state=restarted

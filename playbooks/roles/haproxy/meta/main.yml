@@ -7,18 +7,14 @@
 # code style: https://github.com/edx/configuration/wiki/Ansible-Coding-Conventions
 # license:    https://github.com/edx/configuration/blob/master/LICENSE.TXT
 #
+##
+# Role includes for role haproxy
+# 
+# Example:
 #
-#
-# Handlers for role certs
-#
-# Overview:
-#
-
-- name: certs | restart certs
-  supervisorctl_local: >
-    name=certs
-    supervisorctl_path={{ supervisor_ctl }}
-    config={{ supervisor_cfg }}
-    state=restarted
-  tags: deploy
-
+# dependencies:
+#   - {
+#   role: my_role 
+#   my_role_var0: "foo"
+#   my_role_var1: "bar"
+# }
