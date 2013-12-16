@@ -2,14 +2,14 @@ MEMORY = 2048
 CPU_COUNT = 2
 
 Vagrant.configure("2") do |config|
-  config.vm.box     = "edx-fullstack"
+  config.vm.box     = "edx-fullstack-zhTW"
   config.vm.box_url = "http://dl.minelab.tw/edX/vagrant-images/20131113-dosa-fullstack.box"
 
-  config.vm.network :private_network, ip: "192.168.33.10"
+  config.vm.network :private_network, ip: "192.168.33.20"
 
   # Vagrant DNS config
   config.dns.tld = "dev"
-  config.vm.hostname = "edx-fullstack-dosa"
+  config.vm.hostname = "edx-fullstack-zhTW"
   config.dns.patterns = [/^.*edx.dev$/]
 
   config.vm.provider :virtualbox do |vb|
@@ -21,8 +21,8 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision :ansible do |ansible|
     # point Vagrant at the location of your playbook you want to run
-    ansible.playbook = "../../../../playbooks/vagrant-fullstack.yml"
-    ansible.inventory_path = "../../../../playbooks/vagrant/inventory.ini"
+    ansible.playbook = "../../../../playbooks-zhTW/vagrant-fullstack.yml"
+    ansible.inventory_path = "../../../../playbooks-zhTW/vagrant/inventory.ini"
     ansible.verbose = "extra"
   end
 end
