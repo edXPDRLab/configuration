@@ -1,0 +1,16 @@
+---
+- name: ora | restart ora
+  supervisorctl: >
+    name=ora
+    supervisorctl_path={{ supervisor_ctl }}
+    config={{ supervisor_cfg }}
+    state=restarted
+  tags: deploy
+
+- name: ora | restart ora_celery
+  supervisorctl: >
+    name=ora_celery
+    supervisorctl_path={{ supervisor_ctl }}
+    config={{ supervisor_cfg }}
+    state=restarted
+  tags: deploy
