@@ -1,0 +1,8 @@
+- name: Deploy ora
+  hosts: all
+  sudo: True
+  gather_facts: True
+  roles:
+    - common
+    - supervisor
+    - ora

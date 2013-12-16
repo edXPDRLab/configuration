@@ -68,6 +68,7 @@ EDXAPP_MITX_FEATURES:
   SUBDOMAIN_BRANDING: false
   SUBDOMAIN_COURSE_LISTINGS: false
   PREVIEW_LMS_BASE: $EDXAPP_PREVIEW_LMS_BASE
+  ENABLE_S3_GRADE_DOWNLOADS: true
 
 EDXAPP_BOOK_URL: ''
 # This needs to be set to localhost
@@ -88,9 +89,6 @@ EDXAPP_LMS_NGINX_PORT: 18000
 EDXAPP_LMS_PREVIEW_NGINX_PORT: 18020
 EDXAPP_CMS_NGINX_PORT: 18010
 
-EDXAPP_LMS_BASIC_AUTH: False
-EDXAPP_CMS_BASIC_AUTH: False
-EDXAPP_LMS_PREVIEW_BASIC_AUTH: False
 EDXAPP_LANG: 'en_US.UTF-8'
 EDXAPP_TIME_ZONE: 'America/New_York'
 
@@ -105,7 +103,15 @@ EDXAPP_BULK_EMAIL_DEFAULT_FROM_EMAIL: ''
 EDXAPP_ENV_EXTRA: {}
 EDXAPP_AUTH_EXTRA: {}
 EDXAPP_MKTG_URL_LINK_MAP: {}
+# Set this sets the url for static files
+# Override this var to use a CDN
+# Example: xxxxx.cloudfront.net/static/
+EDXAPP_STATIC_URL_BASE: "/static/"
 
+# Settings for Grade downloads
+EDXAPP_GRADE_STORAGE_TYPE: 'localfs'
+EDXAPP_GRADE_BUCKET: 'edx-grades'
+EDXAPP_GRADE_ROOT_PATH: '/tmp/edx-s3/grades'
 
 #-------- Everything below this line is internal to the role ------------
 
@@ -259,6 +265,11 @@ edxapp_generic_auth_config:  &edxapp_generic_auth
   CELERY_BROKER_PASSWORD: $EDXAPP_CELERY_PASSWORD
 
 generic_env_config:  &edxapp_generic_env
+  GRADES_DOWNLOAD:
+    STORAGE_TYPE: $EDXAPP_GRADE_STORAGE_TYPE
+    BUCKET: $EDXAPP_GRADE_BUCKET
+    ROOT_PATH: $EDXAPP_GRADE_ROOT_PATH
+  STATIC_URL_BASE: $EDXAPP_STATIC_URL_BASE
   STATIC_ROOT_BASE: $edxapp_staticfile_dir
   LMS_BASE: $EDXAPP_LMS_BASE
   CMS_BASE: $EDXAPP_CMS_BASE
@@ -278,6 +289,8 @@ generic_env_config:  &edxapp_generic_env
   FEEDBACK_SUBMISSION_EMAIL: $EDXAPP_FEEDBACK_SUBMISSION_EMAIL
   TIME_ZONE: $EDXAPP_TIME_ZONE
   MKTG_URL_LINK_MAP: $EDXAPP_MKTG_URL_LINK_MAP
+  # repo root for courses
+  GITHUB_REPO_ROOT: $edxapp_course_data_dir
   CACHES:
     default: &default_generic_cache
       BACKEND:  'django.core.cache.backends.memcached.MemcachedCache'
@@ -446,6 +459,8 @@ edxapp_debian_pkgs:
   - ntp
   # for shapely
   - libgeos-dev
+  # i18n
+  - gettext
 
 # Ruby Specific Vars
 edxapp_ruby_version: "1.9.3-p374"

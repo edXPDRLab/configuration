@@ -28,6 +28,10 @@ else
     source "$WORKSPACE/util/jenkins/ascii-convert.sh"
 fi
 
+if [[ -z $static_url_base ]]; then
+  static_url_base="/static"
+fi
+
 if [[ -z $github_username  ]]; then
   github_username=$BUILD_USER_ID
 fi
@@ -48,7 +52,7 @@ if [[ -z $zone ]]; then
 fi
 
 if [[ -z $elb ]]; then
-  elb="!!null"
+  elb="false"
 fi
 
 if [[ -z $dns_name ]]; then
@@ -88,6 +92,15 @@ fi
 
 cd playbooks/edx-east
 
+if [[ $basic_auth == "true" ]]; then
+    # vars specific to provisioning added to $extra-vars
+    cat << EOF_AUTH >> $extra_vars
+NGINX_HTPASSWD_USER: $auth_user
+NGINX_HTPASSWD_PASS: $auth_pass
+EOF_AUTH
+fi
+
+
 if [[ $recreate == "true" ]]; then
     # vars specific to provisioning added to $extra-vars
     cat << EOF >> $extra_vars
@@ -106,8 +119,9 @@ gh_users:
 dns_zone: $dns_zone
 rabbitmq_refresh: True
 GH_USERS_PROMPT: '[$name_tag] '
-elb: "$elb"
+elb: $elb
 EOF
+
     cat $extra_vars
     # run the tasks to launch an ec2 instance from AMI
     ansible-playbook edx_provision.yml  -i inventory.ini -e "@${extra_vars}"  --user ubuntu
