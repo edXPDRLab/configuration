@@ -1,8 +1,9 @@
-- name: Deploy devpi
+- name: Deploy worker
   hosts: all
   sudo: True
   gather_facts: True
   vars_files:
     - ["{{ secure_vars }}", "dummy.yml"]
   roles:
-    - devpi
+    - role: edxapp
+      celery_worker: True
